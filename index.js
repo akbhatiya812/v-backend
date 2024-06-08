@@ -101,7 +101,7 @@ io.on("connection", (socket) => {
     // console.log(activeRooms);
     // console.log(availableRooms);
     socket.join(roomKey);
-    io.to(joinedRoom).emit("joined-room", {joinedRoom, flag:false})
+    io.to(roomKey).emit("joined-room", {joinedRoom, flag:false})
   });
 
   socket.on("leave-room", (roomId) => {
