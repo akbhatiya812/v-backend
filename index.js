@@ -76,31 +76,32 @@ io.on("connection", (socket) => {
   });
 
   socket.on("join-room", (roomKey) => {
-    let joinedRoom;
-    let isWaiting = true;    
-    if(availableRooms.length > 0) {
-      let availableRoomKey = availableRooms[0];
-      const roomObj = activeRooms.find((obj) => obj.roomId === availableRoomKey);
-      if(!roomObj.connectedUsers.includes(socket.id) ){
-        isWaiting=false
-        joinedRoom = availableRoomKey;
-        availableRooms.splice(availableRooms.indexOf(availableRoomKey),1);
-        socket.join(availableRoomKey);
-        roomObj.connectedUsers.push(socket.id);
-      }
-    }else{
-      socket.join(roomKey);
-      joinedRoom = roomKey;
-      isWaiting=true
-      availableRooms.push(roomKey);
-      activeRooms.push({
-        roomId: roomKey,
-        connectedUsers: [socket.id]
-      })
-    }
-    console.log(activeRooms);
-    console.log(availableRooms);
-    io.to(joinedRoom).emit("joined-room", {joinedRoom, flag:isWaiting})
+    // let joinedRoom;
+    // let isWaiting = true;    
+    // if(availableRooms.length > 0) {
+    //   let availableRoomKey = availableRooms[0];
+    //   const roomObj = activeRooms.find((obj) => obj.roomId === availableRoomKey);
+    //   if(!roomObj.connectedUsers.includes(socket.id) ){
+    //     isWaiting=false
+    //     joinedRoom = availableRoomKey;
+    //     availableRooms.splice(availableRooms.indexOf(availableRoomKey),1);
+    //     socket.join(availableRoomKey);
+    //     roomObj.connectedUsers.push(socket.id);
+    //   }
+    // }else{
+    //   socket.join(roomKey);
+    //   joinedRoom = roomKey;
+    //   isWaiting=true
+    //   availableRooms.push(roomKey);
+    //   activeRooms.push({
+    //     roomId: roomKey,
+    //     connectedUsers: [socket.id]
+    //   })
+    // }
+    // console.log(activeRooms);
+    // console.log(availableRooms);
+    socket.join(roomKey);
+    io.to(joinedRoom).emit("joined-room", {joinedRoom, flag:false})
   });
 
   socket.on("leave-room", (roomId) => {
@@ -109,28 +110,28 @@ io.on("connection", (socket) => {
 
   socket.on("exit-chat" , (roomId) => {
     socket.leave(roomId);
-    const roomObj = activeRooms.find( (obj) => obj.roomId === roomId);
-    if(roomObj){
-      activeRooms.splice(activeRooms.indexOf(roomObj), 1);
-    }
-    if(availableRooms.includes(roomId)){
-      availableRooms.splice(availableRooms.indexOf(roomId), 1);
-    }
-    io.to(roomId).emit("chat-closed", {leavedUser : socket.id, roomKey : roomId})
+    // const roomObj = activeRooms.find( (obj) => obj.roomId === roomId);
+    // if(roomObj){
+    //   activeRooms.splice(activeRooms.indexOf(roomObj), 1);
+    // }
+    // if(availableRooms.includes(roomId)){
+    //   availableRooms.splice(availableRooms.indexOf(roomId), 1);
+    // }
+    // io.to(roomId).emit("chat-closed", {leavedUser : socket.id, roomKey : roomId})
     console.log("availableRooms, activeRooms===========>",availableRooms, activeRooms);
   })
 
   socket.on("disconnect", () => {
-    const roomObj = activeRooms.find((obj) => obj.connectedUsers.includes(socket.id));
-    const roomKey = roomObj?.roomId;
-    if(roomObj) {
-      io.to(roomObj.roomId).emit("user-disconnected", {disconnectedUser: socket.id});
-      activeRooms.splice(activeRooms.indexOf(roomObj),1);
-    }
-    if(roomKey){
-      const index = availableRooms.indexOf(roomKey);
-      availableRooms.splice(index,1);
-    }
+    // const roomObj = activeRooms.find((obj) => obj.connectedUsers.includes(socket.id));
+    // const roomKey = roomObj?.roomId;
+    // if(roomObj) {
+    //   io.to(roomObj.roomId).emit("user-disconnected", {disconnectedUser: socket.id});
+    //   activeRooms.splice(activeRooms.indexOf(roomObj),1);
+    // }
+    // if(roomKey){
+    //   const index = availableRooms.indexOf(roomKey);
+    //   availableRooms.splice(index,1);
+    // }
   });
 });
 
