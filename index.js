@@ -101,7 +101,7 @@ io.on("connection", (socket) => {
     // console.log(activeRooms);
     // console.log(availableRooms);
     socket.join(roomKey);
-    io.to(roomKey).emit("joined-room", {joinedRoom, flag:false})
+    io.to(roomKey).emit("joined-room", {roomKey, flag:false})
   });
 
   socket.on("leave-room", (roomId) => {
@@ -118,7 +118,7 @@ io.on("connection", (socket) => {
     //   availableRooms.splice(availableRooms.indexOf(roomId), 1);
     // }
     // io.to(roomId).emit("chat-closed", {leavedUser : socket.id, roomKey : roomId})
-    console.log("availableRooms, activeRooms===========>",availableRooms, activeRooms);
+    // console.log("availableRooms, activeRooms===========>",availableRooms, activeRooms);
   })
 
   socket.on("disconnect", () => {
