@@ -72,7 +72,8 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   socket.on("message", ({ room, message }) => {
     console.log("🚀 ~ socket.on ~ room:", room, message)
-    socket.to(room).emit("receive-message", message);
+    // socket.to(room).emit("receive-message", message);
+    io.to(roomKey).emit("receive-message", message)
   });
 
   socket.on("join-room", (roomKey) => {
